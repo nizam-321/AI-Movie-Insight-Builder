@@ -1,3 +1,4 @@
+//path: components/MovieSearch.tsx
 "use client";
 
 import { useState } from "react";

@@ -1,3 +1,4 @@
+//path: components/MovieDetails.tsx
 import Image from "next/image";
 import type { Movie } from "@/types/movie";
 

@@ -1,6 +1,7 @@
+//path: lib/omdb.ts
 import axios from "axios"
 
-const API_KEY = process.env.NEXT_PUBLIC_OMDB_API_KEY
+const API_KEY = process.env.OMDB_API_KEY
 
 export const fetchMovieById = async (imdbId: string) => {
 

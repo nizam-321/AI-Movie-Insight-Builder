@@ -1,7 +1,8 @@
-import OpenAI from "openai";
+//path: lib/ai.ts
+import { GoogleGenAI } from "@google/genai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
 });
 
 export const analyzeSentiment = async (reviews: string[]) => {
@@ -9,24 +10,39 @@ export const analyzeSentiment = async (reviews: string[]) => {
     const prompt = `
 Analyze the following movie audience reviews.
 
-Provide:
-1. Overall sentiment (Positive, Mixed, or Negative)
-2. A short summary (4-5 sentences)
+Return ONLY valid JSON in this format:
+
+{
+  "sentiment": "Positive | Mixed | Negative",
+  "summary": "2-3 sentence summary of audience opinion"
+}
 
 Reviews:
 ${reviews.join("\n")}
 `;
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "user", content: prompt }
-      ],
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
     });
 
-    return response.choices[0].message?.content || "No response from AI.";
+    const text =
+      response.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    try {
+      return JSON.parse(text);
+    } catch {
+      return {
+        sentiment: "Mixed",
+        summary: text || "Could not parse AI response.",
+      };
+    }
   } catch (error) {
-    console.error("OpenAI error:", error);
-    return "AI analysis unavailable.";
+    console.error("Gemini error:", error);
+
+    return {
+      sentiment: "Mixed",
+      summary: "AI analysis unavailable.",
+    };
   }
 };

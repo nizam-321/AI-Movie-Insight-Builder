@@ -1,3 +1,4 @@
+//path: types/movie.ts
 export interface Movie {
   Title: string
   Year: string

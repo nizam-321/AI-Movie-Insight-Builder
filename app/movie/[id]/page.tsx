@@ -1,18 +1,24 @@
+import { fetchMovieById } from "@/lib/omdb"
+import MovieDetails from "@/components/MovieDetails"
+import type { Movie } from "@/types/movie"
+
 interface Props {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export default async function MoviePage({ params }: Props){
-    const {id} = await params
+
+  const { id } = await params
+
+  const movie: Movie = await fetchMovieById(id)
+
   return(
 
-    <div className="min-h-screen flex items-center justify-center ">
+    <div className="min-h-screen flex justify-center items-center p-8">
 
-      <h1 className="text-3xl text-black font-bold">
-        Movie ID: {id}
-      </h1>
+      <MovieDetails movie={movie} />
 
     </div>
 

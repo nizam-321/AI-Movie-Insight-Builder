@@ -9,6 +9,7 @@ import MovieDetails from "@/components/MovieDetails";
 export default function MovieSearch() {
   const [movieId, setMovieId] = useState<string>("");
   const [movie, setMovie] = useState<Movie | null>(null);
+  const [loading, setLoading ] = useState(false)
 
   const handleSearch = async () => {
     if (!movieId) {
@@ -17,11 +18,14 @@ export default function MovieSearch() {
     }
 
     try {
+      setLoading(true);
       const data = await fetchMovieById(movieId);
 
       setMovie(data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching movie:", error);
+      setLoading(false);
     }
   };
 
@@ -37,9 +41,10 @@ export default function MovieSearch() {
 
       <button
         onClick={handleSearch}
+        disabled={loading}
         className="w-full mt-4 bg-blue-600 hover:bg-blue-700 p-3 rounded-lg"
       >
-        Analyze Movie
+        {loading ? "Loading...": "Analyze Movie"}
       </button>
       <MovieDetails movie={movie} />
     </div>

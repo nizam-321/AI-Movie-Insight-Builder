@@ -2,6 +2,7 @@ import { fetchMovieById } from "@/lib/omdb";
 import MovieDetails from "@/components/MovieDetails";
 import type { Movie } from "@/types/movie";
 import { fetchMovieReviews } from "@/lib/reviews";
+import { analyzeSentiment } from "@/lib/ai";
 
 interface Props {
   params: Promise<{
@@ -14,6 +15,8 @@ export default async function MoviePage({ params }: Props) {
 
   const movie: Movie = await fetchMovieById(id);
   const reviews = await fetchMovieReviews(movie.Title);
+  const reviewTexts = reviews.slice(0, 5).map((r: any) => r.content);
+  const sentiment = await analyzeSentiment(reviewTexts);
 
   return (
     <div className="min-h-screen flex justify-center items-center p-8">
@@ -26,6 +29,11 @@ export default async function MoviePage({ params }: Props) {
             {review.content}
           </p>
         ))}
+      </div>
+      <div className="mt-10 max-w-xl bg-gray-800 p-6 rounded-lg">
+        <h2 className="text-xl font-semibold mb-3">AI Audience Insight</h2>
+
+        <p className="text-gray-300 whitespace-pre-line">{sentiment}</p>
       </div>
     </div>
   );

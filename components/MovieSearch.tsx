@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { fetchMovieById } from "@/lib/omdb";
 
-
+import type {Movie} from "@/types/movie"
 import MovieDetails from "@/components/MovieDetails";
 
 export default function MovieSearch() {
   const [movieId, setMovieId] = useState<string>("");
-  const [movie, setMovie] = useState<any>(null);
+  const [movie, setMovie] = useState<Movie | null>(null);
 
   const handleSearch = async () => {
     if (!movieId) {

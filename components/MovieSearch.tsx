@@ -50,8 +50,9 @@ export default function MovieSearch() {
           />
           <h2 className="text-xl font-semibold">{movie.Title}</h2>
           <p className="text-gray-400 mt-2">Year: {movie.Year}</p>
-<p className="text-yellow-400">IMDb Rating: ⭐ {movie.imdbRating}</p>
-<p className="text-gray-300 mt-4 leading-relaxed">{movie.Plot}</p>
+          <p className="text-yellow-400">IMDb Rating: ⭐ {movie.imdbRating}</p>
+          <p className="text-gray-300 mt-4 leading-relaxed">{movie.Plot}</p>
+          <p className="text-gray-400 mt-3">Cast: {movie.Actors}</p>
         </div>
       )}
     </div>

@@ -13,11 +13,16 @@ export const fetchMovieById = async (imdbId: string) => {
       }
     })
 
-    return response.data
+    const data =  response.data;
 
-  } catch (error) {
+    if (data.Response === "False") {
+        return null;
+    }
+    return data
+
+  } catch (error: any) {
     console.error("Error fetching movie:", error)
-    throw new Error("Failed to fetch movie data")
+    return null;
   }
 
 }

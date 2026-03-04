@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { fetchMovieById } from "@/lib/omdb";
 
-import type {Movie} from "@/types/movie"
+import type { Movie } from "@/types/movie";
 import MovieDetails from "@/components/MovieDetails";
 
 export default function MovieSearch() {
   const [movieId, setMovieId] = useState<string>("");
   const [movie, setMovie] = useState<Movie | null>(null);
-  const [loading, setLoading ] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSearch = async () => {
     if (!movieId) {
@@ -17,18 +18,18 @@ export default function MovieSearch() {
       return;
     }
 
-    try {
+      setError(null);
       setLoading(true);
       const data = await fetchMovieById(movieId);
-
+      if (!data) {
+        setError("Failed to fetch movie data. Please check IMDb ID.");
+        setMovie(null);
+        setLoading(false);
+        return;
+      }
       setMovie(data);
       setLoading(false);
-    } catch (error) {
-      console.error("Error fetching movie:", error);
-      setLoading(false);
-    }
   };
-
   return (
     <div className="w-full max-w-md">
       <input
@@ -44,9 +45,10 @@ export default function MovieSearch() {
         disabled={loading}
         className="w-full mt-4 bg-blue-600 hover:bg-blue-700 p-3 rounded-lg"
       >
-        {loading ? "Loading...": "Analyze Movie"}
+        {loading ? "Loading..." : "Analyze Movie"}
       </button>
-      <MovieDetails movie={movie} />
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {movie && !error && <MovieDetails movie={movie} />}
     </div>
   );
 }

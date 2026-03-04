@@ -1,6 +1,7 @@
 import Image from "next/image"
+import type {Movie} from "@/types/movie"
 interface Props {
-  movie: any
+  movie: Movie | null
 }
 
 export default function MovieDetails({ movie }: Props) {

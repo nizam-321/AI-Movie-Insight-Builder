@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { fetchMovieById } from "@/lib/omdb";
-import Image from "next/image";
+
+
+import MovieDetails from "@/components/MovieDetails";
 
 export default function MovieSearch() {
   const [movieId, setMovieId] = useState<string>("");
@@ -39,22 +41,7 @@ export default function MovieSearch() {
       >
         Analyze Movie
       </button>
-      {movie && (
-        <div className="mt-6 p-4 bg-gray-800 rounded-lg">
-          <Image
-            src={movie.Poster}
-            alt={movie.Title}
-            width={300}
-            height={450}
-            className="w-full rounded-md mb-4"
-          />
-          <h2 className="text-xl font-semibold">{movie.Title}</h2>
-          <p className="text-gray-400 mt-2">Year: {movie.Year}</p>
-          <p className="text-yellow-400">IMDb Rating: ⭐ {movie.imdbRating}</p>
-          <p className="text-gray-300 mt-4 leading-relaxed">{movie.Plot}</p>
-          <p className="text-gray-400 mt-3">Cast: {movie.Actors}</p>
-        </div>
-      )}
+      <MovieDetails movie={movie} />
     </div>
   );
 }

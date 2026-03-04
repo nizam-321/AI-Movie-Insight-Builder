@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { fetchMovieById } from "@/lib/omdb";
+import Image from "next/image";
 
 export default function MovieSearch() {
   const [movieId, setMovieId] = useState<string>("");
@@ -40,6 +41,13 @@ export default function MovieSearch() {
       </button>
       {movie && (
         <div className="mt-6 p-4 bg-gray-800 rounded-lg">
+          <Image
+            src={movie.Poster}
+            alt={movie.Title}
+            width={300}
+            height={450}
+            className="w-full rounded-md mb-4"
+          />
           <h2 className="text-xl font-semibold">{movie.Title}</h2>
         </div>
       )}

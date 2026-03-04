@@ -5,7 +5,8 @@ import { fetchMovieById } from "@/lib/omdb"
 
 export default function MovieSearch(){
 
-  const [movieId,setMovieId] = useState<string>("")
+  const [movieId,setMovieId] = useState<string>("");
+  const [movie, setMovie] = useState<any>(null)
 
   const handleSearch = async () => {
 
@@ -18,7 +19,7 @@ export default function MovieSearch(){
 
       const data = await fetchMovieById(movieId) 
 
-      console.log("Movie Data:",data)
+      setMovie(data)
 
     }catch(error){
 

@@ -1,15 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { Search, Loader2, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getMovieInsight } from "@/app/actions/movieActions";
-import MovieDetails from "@/components/MovieDetails";
-import type { MovieInsight } from "@/types/movie";
 
 export default function MovieSearch() {
+  const router = useRouter();
   const [movieId, setMovieId] = useState<string>("");
-  const [data, setData] = useState<MovieInsight | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,37 +32,18 @@ export default function MovieSearch() {
     return true;
   };
 
-  const fetchMovieData = async (): Promise<void> => {
+  const handleSearch = async (e: FormEvent): Promise<void> => {
+    e.preventDefault();
+    
+    if (!validateInput()) {
+      return;
+    }
+
     setError(null);
     setLoading(true);
-    setData(null);
 
-    try {
-      const res = await getMovieInsight(movieId.trim());
-      
-      if (!res.success) {
-        setError(res.error || "Failed to fetch movie details.");
-      } else if (res.data) {
-        setData(res.data);
-      } else {
-        setError("No data received from server.");
-      }
-    } catch (error: any) {
-      console.error("Unexpected error:", error);
-      setError(
-        error.message || "An unexpected error occurred while fetching data."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSearch = async (e?: React.FormEvent): Promise<void> => {
-    e?.preventDefault();
-    
-    if (validateInput()) {
-      await fetchMovieData();
-    }
+    // Navigate to movie detail page
+    router.push(`/movie/${movieId.trim()}`);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -80,7 +59,7 @@ export default function MovieSearch() {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-xl bg-slate-900/50 backdrop-blur-md border border-slate-800 p-8 rounded-2xl shadow-2xl mb-12"
+        className="w-full max-w-xl bg-slate-900/50 backdrop-blur-md border border-slate-800 p-8 rounded-2xl shadow-2xl"
       >
         <form onSubmit={handleSearch} className="flex flex-col gap-6">
           <div className="relative group">
@@ -102,15 +81,15 @@ export default function MovieSearch() {
             type="submit"
             disabled={loading || !movieId.trim()}
             className="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-blue-500/30 active:scale-[0.98]"
-            aria-label="Get AI Insights"
+            aria-label="Analyze Movie"
           >
             {loading ? (
               <>
                 <Loader2 size={20} className="animate-spin" />
-                <span>Analyzing Movie...</span>
+                <span>Loading...</span>
               </>
             ) : (
-              "Get AI Insights"
+              "Analyze Movie"
             )}
           </button>
         </form>
@@ -130,26 +109,6 @@ export default function MovieSearch() {
           )}
         </AnimatePresence>
       </motion.div>
-
-      {/* Movie Result Section */}
-      <AnimatePresence mode="wait">
-        {data && data.movie && (
-          <motion.div
-            key={data.movie.imdbID}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ type: "spring", damping: 20, stiffness: 100 }}
-            className="w-full"
-          >
-            <MovieDetails 
-              movie={data.movie} 
-              sentiment={data.sentiment} 
-              reviews={data.reviews} 
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

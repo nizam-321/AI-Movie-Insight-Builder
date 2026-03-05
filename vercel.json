@@ -1,0 +1,12 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "OMDB_API_KEY": "@omdb_api_key",
+    "TMDB_API_KEY": "@tmdb_api_key",
+    "GEMINI_API_KEY": "@gemini_api_key"
+  }
+}

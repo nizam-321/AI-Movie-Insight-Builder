@@ -1,14 +1,20 @@
-# AI Movie Insight Builder
+# 🎬 AI Movie Insight Builder
 
-A Next.js application that provides AI-powered movie analysis using sentiment analysis of audience reviews. Get instant insights about movies by entering their IMDb ID.
+A premium, AI-powered movie analysis platform that provides instant sentiment analysis and comprehensive movie insights. Built with Next.js 15, TypeScript, and Google Gemini AI.
 
-## Features
+![AI Movie Insight Builder](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?style=for-the-badge&logo=tailwind-css)
 
-- 🎬 **Movie Information**: Fetch detailed movie data from OMDB API
-- 📊 **Sentiment Analysis**: AI-powered analysis of audience reviews using Google Gemini
-- 💬 **Review Aggregation**: Collect and display reviews from TMDB
-- 🎨 **Modern UI**: Beautiful, responsive interface with Framer Motion animations
-- ⚡ **Fast Performance**: Built with Next.js 15 and React 19
+## ✨ Features
+
+- 🎯 **Instant Movie Analysis** - Enter any IMDb ID and get comprehensive movie details
+- 🤖 **AI-Powered Sentiment Analysis** - Google Gemini analyzes audience reviews for sentiment insights
+- 📊 **Audience Reviews** - Aggregated reviews from TMDB with smart filtering
+- 🎨 **Premium UI/UX** - Netflix/IMDb-inspired design with smooth animations
+- 📱 **Fully Responsive** - Optimized for desktop, tablet, and mobile devices
+- ⚡ **Lightning Fast** - Built with Next.js 15 App Router and Server Components
+- 🔒 **Type Safe** - Full TypeScript implementation for reliability
 
 ## Tech Stack
 
@@ -63,38 +69,42 @@ Before you begin, ensure you have:
    
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## Usage
+## 📖 Usage
 
-1. Enter an IMDb ID (e.g., `tt0133093` for The Matrix)
-2. Click "Get AI Insights"
-3. View the movie details, AI sentiment analysis, and audience reviews
+1. **Enter an IMDb ID** on the home page (e.g., `tt0133093` for The Matrix)
+2. **Click "Analyze Movie"** to navigate to the movie detail page
+3. **View comprehensive insights** including:
+   - Movie poster, title, and metadata
+   - IMDb rating and votes
+   - Plot summary
+   - Cast and director information
+   - AI-generated sentiment analysis
+   - Audience reviews from TMDB
 
-## Project Structure
+## 🏗️ Project Structure
 
 ```
 ai-movie-insight/
 ├── app/
-│   ├── actions/
-│   │   └── movieActions.ts      # Server actions for movie data
 │   ├── movie/
 │   │   └── [id]/
-│   │       └── page.tsx          # Dynamic movie page
+│   │       ├── page.tsx          # Movie detail page
+│   │       ├── loading.tsx       # Loading state
+│   │       └── error.tsx         # Error boundary
 │   ├── layout.tsx                # Root layout
 │   ├── page.tsx                  # Home page
 │   └── globals.css               # Global styles
 ├── components/
-│   ├── MovieDetails.tsx          # Movie details component
-│   └── MovieSearch.tsx           # Search component
+│   ├── MovieSearch.tsx           # Search component
+│   └── MovieDetails.tsx          # Movie details display
 ├── lib/
-│   ├── ai.ts                     # AI sentiment analysis
-│   ├── omdb.ts                   # OMDB API integration
-│   └── reviews.ts                # TMDB reviews integration
+│   ├── omdb.ts                   # OMDb API integration
+│   ├── reviews.ts                # TMDB API integration
+│   └── ai.ts                     # Google Gemini AI integration
 ├── types/
 │   └── movie.ts                  # TypeScript type definitions
-├── .env.local                    # Environment variables (not in git)
-├── next.config.ts                # Next.js configuration
-├── package.json                  # Dependencies
-└── tsconfig.json                 # TypeScript configuration
+└── public/
+    └── favicon.ico               # App favicon
 ```
 
 ## API Integrations
@@ -162,9 +172,71 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 This project is open source and available under the MIT License.
 
-## Acknowledgments
+## 🎨 Design Philosophy
 
-- OMDB API for movie data
-- TMDB for review data
-- Google Gemini for AI capabilities
-- Next.js team for the amazing framework
+The UI is inspired by industry leaders:
+
+- **Netflix** - Dark theme, card-based layouts, smooth transitions
+- **IMDb** - Information hierarchy, rating displays, metadata organization
+- **Modern Web** - Glassmorphism, gradient accents, micro-interactions
+
+## 🚢 Deployment
+
+### Deploy to Vercel (Recommended)
+
+1. **Push your code to GitHub**
+
+2. **Import to Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Import your repository
+
+3. **Add environment variables**
+   - Add all three API keys in Vercel project settings
+
+4. **Deploy**
+   - Vercel will automatically build and deploy your app
+
+## 🔐 Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `OMDB_API_KEY` | OMDb API key for movie metadata | Yes |
+| `TMDB_API_KEY` | TMDB API key for reviews | Yes |
+| `GEMINI_API_KEY` | Google Gemini API key for AI analysis | Yes |
+
+## 🐛 Error Handling
+
+The app includes comprehensive error handling:
+
+- **Invalid IMDb ID** - Client-side validation with helpful messages
+- **Movie Not Found** - Graceful error page with navigation
+- **API Failures** - Fallback messages and retry options
+- **Network Issues** - Timeout handling and user feedback
+- **AI Analysis Errors** - Graceful degradation with fallback messages
+
+## 🎯 Performance Optimizations
+
+- Server-side rendering for instant page loads
+- Image optimization with Next.js Image component
+- API response caching (1 hour TTL)
+- Lazy loading for reviews
+- Optimized bundle size with tree shaking
+
+## 📱 Responsive Design
+
+Fully responsive breakpoints:
+- Mobile: 320px - 640px
+- Tablet: 641px - 1024px
+- Desktop: 1025px+
+
+## 🙏 Acknowledgments
+
+- [OMDb API](http://www.omdbapi.com/) for movie metadata
+- [TMDB](https://www.themoviedb.org/) for audience reviews
+- [Google Gemini](https://deepmind.google/technologies/gemini/) for AI analysis
+- [Vercel](https://vercel.com) for hosting platform
+
+---
+
+**Built with ❤️ for the Brew Hiring Assignment**

@@ -1,57 +1,63 @@
-//path: app/movie/[id]/page.tsx
+// path: app/movie/[id]/page.tsx
+
 import { fetchMovieById } from "@/lib/omdb";
-import MovieDetails from "@/components/MovieDetails";
-import type { Movie } from "@/types/movie";
 import { fetchMovieReviews } from "@/lib/reviews";
 import { analyzeSentiment } from "@/lib/ai";
+import MovieDetails from "@/components/MovieDetails";
+import type { Movie, Review, Sentiment } from "@/types/movie";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{
+    id: string;
+  }>;
 }
 
 export default async function MoviePage({ params }: Props) {
   const { id } = await params;
 
-  const movie: Movie = await fetchMovieById(id);
-  const reviews = await fetchMovieReviews(movie.Title);
+  // Fetch movie data
+  const movie: Movie | null = await fetchMovieById(id);
 
-  const reviewTexts = reviews.slice(0, 5).map((r: any) => r.content);
-  const sentiment = await analyzeSentiment(reviewTexts);
+  if (!movie) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white px-4">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold mb-4">Movie Not Found</h1>
+          <p className="text-slate-400">
+            The movie with ID &quot;{id}&quot; could not be found.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Fetch reviews
+  const rawReviews = await fetchMovieReviews(movie.Title, movie.Year);
+  const reviews: Review[] = rawReviews.map((r: any) => ({
+    author: r.author || "Anonymous",
+    content: r.content || "",
+  }));
+
+  // Analyze sentiment
+  let sentiment: Sentiment = {
+    sentiment: "No Reviews",
+    summary: "No audience reviews found for this movie.",
+  };
+
+  if (reviews.length > 0) {
+    const reviewTexts = reviews
+      .slice(0, 5)
+      .map((r) => r.content)
+      .filter((content) => content && content.trim().length > 0);
+
+    if (reviewTexts.length > 0) {
+      sentiment = await analyzeSentiment(reviewTexts);
+    }
+  }
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-8 gap-8">
-
-      <MovieDetails movie={movie} />
-
-      {/* AI Insight */}
-     <div className="max-w-xl w-full bg-gray-800 p-6 rounded-lg">
-  <h2 className="text-xl font-semibold mb-3">AI Audience Insight</h2>
-
-  {sentiment && (
-    <>
-      <p className="text-yellow-400 font-medium">
-        Sentiment: {sentiment.sentiment}
-      </p>
-      <p className="text-gray-300 mt-2">
-        {sentiment.summary}
-      </p>
-    </>
-  )}
-</div>
-
-      {/* Reviews */}
-      <div className="max-w-xl w-full">
-        <h2 className="text-2xl font-semibold mb-4">
-          Audience Reviews
-        </h2>
-
-        {reviews.slice(0, 3).map((review: any, index: number) => (
-          <p key={index} className="text-gray-300 mb-3">
-            {review.content}
-          </p>
-        ))}
-      </div>
-
+    <div className="min-h-screen bg-slate-950 text-white px-6 py-10 flex justify-center">
+      <MovieDetails movie={movie} sentiment={sentiment} reviews={reviews} />
     </div>
   );
 }

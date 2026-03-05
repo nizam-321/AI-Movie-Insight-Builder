@@ -72,8 +72,10 @@ ${reviews.slice(0, 5).join("\n\n---\n\n")}
         summary: safeJson || "Could not parse AI response.",
       };
     }
-  } catch (error: Error) {
-    console.error("Gemini API error:", error.message || error);
+  } catch (error: unknown) {
+    console.error("Gemini API error:",
+    error instanceof Error ? error.message : error
+);
     return {
       sentiment: "Mixed",
       summary: "AI analysis temporarily unavailable. Please try again later.",

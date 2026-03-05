@@ -3,12 +3,19 @@
 :root {
   --background: #020617;
   --foreground: #f8fafc;
+  --font-urbanist: 'Urbanist', sans-serif;
+
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 }
+
+html, body {
+  font-family: var(--font-urbanist);
+}
+
 
 body {
   background: var(--background);

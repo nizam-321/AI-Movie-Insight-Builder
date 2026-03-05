@@ -72,7 +72,7 @@ ${reviews.slice(0, 5).join("\n\n---\n\n")}
         summary: safeJson || "Could not parse AI response.",
       };
     }
-  } catch (error: any) {
+  } catch (error: Error) {
     console.error("Gemini API error:", error.message || error);
     return {
       sentiment: "Mixed",

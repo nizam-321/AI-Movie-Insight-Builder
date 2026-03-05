@@ -15,7 +15,7 @@ interface TMDBReviewResult {
 export const fetchMovieReviews = async (
   movieTitle: string,
   year?: string
-): Promise<any[]> => {
+): Promise<Array<{ author: string; content: string }>> => {
   if (!TMDB_API_KEY) {
     console.error("TMDB_API_KEY is not configured");
     return [];
@@ -60,8 +60,8 @@ export const fetchMovieReviews = async (
 
     const reviewData: TMDBReviewResult = await reviewRes.json();
     return reviewData?.results || [];
-  } catch (error: any) {
-    console.error("TMDB fetch error:", error.message || error);
+  } catch (error: unknown) {
+    console.error("TMDB fetch error:", error instanceof Error ? error.message : error);
     return [];
   }
 };

@@ -43,7 +43,7 @@ export default async function MoviePage({ params }: Props) {
 
   // Fetch reviews
   const rawReviews = await fetchMovieReviews(movie.Title, movie.Year);
-  const reviews: Review[] = rawReviews.map((r: any) => ({
+  const reviews: Review[] = rawReviews.map((r: Review) => ({
     author: r.author || "Anonymous",
     content: r.content || "",
   }));

@@ -10,10 +10,15 @@ interface Sentiment {
   summary: string;
 }
 
+interface Review {
+  author?: string;
+  content: string;
+}
+
 interface Props {
   movie: Movie | null;
   sentiment: Sentiment;
-  reviews: any[];
+  reviews: Review[];
 }
 
 const SentimentBadge = ({ sentiment }: { sentiment: string }) => {
@@ -186,7 +191,7 @@ export default function MovieDetails({ movie, sentiment, reviews }: Props) {
 
           <div className="flex flex-col gap-3 md:gap-4 max-h-[500px] md:max-h-[600px] overflow-y-auto pr-2 -mr-2 custom-scrollbar">
             {reviews.length > 0 ? (
-              reviews.slice(0, 10).map((review: any, index: number) => (
+              reviews.slice(0, 10).map((review: Review, index: number) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}

@@ -32,8 +32,8 @@ export const fetchMovieById = async (imdbId: string): Promise<Movie | null> => {
     }
 
     return data;
-  } catch (error: any) {
-    console.error("Error fetching movie from OMDB:", error.message || error);
+  } catch (error: unknown) {
+    console.error("Error fetching movie from OMDB:", error instanceof Error ? error.message : error);
     return null;
   }
 };

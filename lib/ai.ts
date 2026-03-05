@@ -1,15 +1,13 @@
-//path: lib/ai.ts
+// path: lib/ai.ts
 import { GoogleGenAI } from "@google/genai";
 import type { Sentiment } from "@/types/movie";
 
+// Client automatically picks GEMINI_API_KEY from env
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY || "",
 });
 
-export const analyzeSentiment = async (
-  reviews: string[]
-): Promise<Sentiment> => {
-  // Return default if no API key
+export const analyzeSentiment = async (reviews: string[]): Promise<Sentiment> => {
   if (!process.env.GEMINI_API_KEY) {
     console.error("GEMINI_API_KEY is not configured");
     return {
@@ -18,7 +16,6 @@ export const analyzeSentiment = async (
     };
   }
 
-  // Return default if no reviews
   if (!reviews || reviews.length === 0) {
     return {
       sentiment: "No Reviews",
@@ -41,42 +38,42 @@ Reviews:
 ${reviews.slice(0, 5).join("\n\n---\n\n")}
 `;
 
-    const response = await ai
-      .getGenerativeModel({
-        model: "gemini-1.5-flash",
-      })
-      .generateContent(prompt);
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
 
-    const text = response.response.text();
+    const text = response.text?.trim() || "";
 
-    // Clean up the response text
+    // Clean response (remove markdown fences etc.)
     const cleanedText = text
       .replace(/```json/g, "")
       .replace(/```/g, "")
       .trim();
 
+    // Ensure valid JSON boundaries
+    const jsonStart = cleanedText.indexOf("{");
+    const jsonEnd = cleanedText.lastIndexOf("}");
+    const safeJson = cleanedText.slice(jsonStart, jsonEnd + 1);
+
     try {
-      const parsed = JSON.parse(cleanedText);
-      
-      // Validate the response structure
+      const parsed = JSON.parse(safeJson);
       if (parsed.sentiment && parsed.summary) {
         return {
           sentiment: parsed.sentiment,
           summary: parsed.summary,
         };
       }
-      
       throw new Error("Invalid response structure");
     } catch (parseError) {
       console.error("Failed to parse AI response:", parseError);
       return {
         sentiment: "Mixed",
-        summary: cleanedText || "Could not parse AI response.",
+        summary: safeJson || "Could not parse AI response.",
       };
     }
   } catch (error: any) {
     console.error("Gemini API error:", error.message || error);
-
     return {
       sentiment: "Mixed",
       summary: "AI analysis temporarily unavailable. Please try again later.",

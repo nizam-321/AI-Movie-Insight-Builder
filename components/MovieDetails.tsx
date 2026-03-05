@@ -55,18 +55,18 @@ export default function MovieDetails({ movie, sentiment, reviews }: Props) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative overflow-hidden bg-gradient-to-br from-slate-900/90 via-slate-900/50 to-slate-900/90 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 sm:p-8 md:p-12 shadow-2xl"
+        className="relative overflow-hidden  bg-gradient-to-br from-slate-900/90 via-slate-900/50 to-slate-900/90 backdrop-blur-2xl  p-6 sm:p-8 md:p-12 shadow-2xl"
       >
         {/* Background decoration */}
         <div className="absolute -top-16 -right-16 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-indigo-600/5 rounded-full blur-3xl pointer-events-none" />
         
-        <div className="flex flex-col lg:flex-row gap-8 md:gap-12 relative z-10">
+        <div className="flex flex-col lg:flex-row gap-8 md:gap-12 relative z-10 ">
           {/* Poster with hover effect */}
           <motion.div 
             whileHover={{ scale: 1.02, rotate: -0.5 }}
             transition={{ type: "spring", stiffness: 300 }}
-            className="flex-shrink-0 mx-auto lg:mx-0 shadow-2xl rounded-2xl overflow-hidden ring-2 ring-white/10 hover:ring-white/20 transition-all"
+            className="flex-shrink-0 mx-auto lg:mx-0  overflow-hidden  transition-all"
           >
             {posterSrc ? (
               <Image
